@@ -1,43 +1,94 @@
 import {
     Entity,
-    ObjectIdColumn,
+    PrimaryGeneratedColumn,
     Column,
-    CreateDateColumn,
+    SaveDateColumn,
     UpdateDateColumn,
-} from "typeorm";
-import { ObjectId } from "mongodb";
-import Answer from "dto/Answer";
-import Question from "dto/Question";
+} from "@techmmunity/symbiosis";
+import { QuestionTypes } from "enums/question-types";
 
-@Entity("forms")
-export default class Form {
-    @ObjectIdColumn({
-        name: "_id",
+@Entity({
+    isSubEntity: true,
+})
+export class Alternative {
+    @Column()
+    name: string
+}
+
+@Entity({
+    isSubEntity: true,
+})
+export class AnsweredAlternative extends Alternative {
+    @Column()
+    answer: string
+}
+
+@Entity({
+    isSubEntity: true,
+})
+export class Question {
+    @Column({
+        enum: QuestionTypes,
     })
-    id: ObjectId;
+    type: QuestionTypes
 
     @Column()
-    authorId: ObjectId;
+    description: string
 
     @Column({
-        default: "No title",
+        type: Alternative,
+        defaultValue: [],
+    })
+    alternatives: Alternative[]
+}
+
+@Entity({
+    isSubEntity: true,
+})
+export class Answer {
+    @Column()
+    authorId: string
+
+    @Column()
+    textAnswer: string
+
+    @Column({
+        type: AnsweredAlternative,
+        defaultValue: [],
+    })
+    alternatives: AnsweredAlternative[]
+}
+
+@Entity("forms")
+export class Form {
+    @PrimaryGeneratedColumn({
+        name: "_id",
+    })
+    id: string;
+
+    @Column()
+    authorId: string;
+
+    @Column({
+        defaultValue: "No title",
     })
     title: string;
 
     @Column({
-        default: "No description",
+        defaultValue: "No description",
     })
     description: string;
 
-    @Column()
+    @Column(Question)
     questions: Question[];
 
     @Column({
-        default: [],
+        type: Answer,
+        defaultvalue: [],
     })
     answers: Answer[];
 
-    @CreateDateColumn()
+    @SaveDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()

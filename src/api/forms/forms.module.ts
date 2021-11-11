@@ -1,11 +1,11 @@
-import { Module, NestModule, MiddlewareConsumer } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import Form from "database/entities/Form";
+import { Module } from "@nestjs/common";
+import { SymbiosisModule } from "@techmmunity/symbiosis-nestjs";
+import { Form } from "database/entities/Form";
 import { FormsController } from "./forms.controller";
 import { FormsService } from "./forms.service";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Form])],
+    imports: [SymbiosisModule.forFeature([Form])],
     controllers: [FormsController],
     providers: [FormsService],
 })

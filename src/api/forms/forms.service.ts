@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import Form from "database/entities/Form";
-import { Repository } from "typeorm";
+import { InjectRepository } from "@techmmunity/symbiosis-nestjs";
+import { Form } from "database/entities/Form";
+import { Repository } from "@techmmunity/symbiosis-mongodb";
 import { ObjectId } from "mongodb";
 
 @Injectable()
@@ -12,13 +12,15 @@ export class FormsService {
     ) {} // eslint-disable-line no-empty-function
 
     async findAll() {
-        return (await this.forms.find()).map((form) => form.id.toString());
+        return (await this.forms.find({})).map((form) => form.id.toString());
     }
 
     async findOne(formId: string) {
         const parsedId = new ObjectId(formId);
         const form = await this.forms.findOne({
-            id: parsedId,
+            where: {
+                id: parsedId,
+            },
         });
 
         if (!form) {

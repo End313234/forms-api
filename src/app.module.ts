@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import Form from "database/entities/Form";
+import { SymbiosisModule } from "@techmmunity/symbiosis-nestjs";
+import { Connection, MongodbConnectionOptions } from "@techmmunity/symbiosis-mongodb";
+import { Form } from "database/entities/Form";
 import { User } from "database/entities/User";
 import { ConfigModule } from "@nestjs/config";
 import { APP_PIPE } from "@nestjs/core";
@@ -13,12 +14,12 @@ import API from "api";
         ConfigModule.forRoot({
             envFilePath: ".env.local",
         }),
-        TypeOrmModule.forRoot({
-            type: "mongodb",
-            url: process.env.DATABASE_URL,
-            database: "FormAPI",
-            useUnifiedTopology: true,
+        SymbiosisModule.forRoot<MongodbConnectionOptions>(Connection, {
             entities: [Form, User],
+            databaseConfig: {
+                databaseName: "FormsAPI",
+                url: process.env.DATABASE_URL,
+            },
         }),
     ],
     controllers: [],

@@ -1,19 +1,18 @@
 import {
     Column,
-    CreateDateColumn,
+    SaveDateColumn,
     Entity,
-    ObjectIdColumn,
+    PrimaryGeneratedColumn,
     UpdateDateColumn,
-} from "typeorm";
-import { ObjectId } from "mongodb";
-import Form from "./Form";
+} from "@techmmunity/symbiosis";
+import { Form } from "./Form";
 
 @Entity("users")
-export default class User {
-    @ObjectIdColumn({
+export class User {
+    @PrimaryGeneratedColumn({
         name: "_id",
     })
-    id: ObjectId;
+    id: string;
 
     @Column()
     email: string;
@@ -28,16 +27,12 @@ export default class User {
     password: string;
 
     @Column({
-        default: [],
+        type: Form,
+        defaultValue: [],
     })
     answeredForms: Form[];
 
-    @Column({
-        default: [],
-    })
-    createdForms: Form[];
-
-    @CreateDateColumn()
+    @SaveDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
