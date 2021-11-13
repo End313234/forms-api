@@ -6,6 +6,7 @@ import {
     Get,
     UseGuards,
     Delete,
+    Param,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { JwtAuthGuard } from "api/auth/guard/jwt-auth-guard.guard";
@@ -28,14 +29,23 @@ export default class UsersController {
         return user;
     }
 
-    @Get()
-    async getUser(@Body() body: GetUserDto) {
-        return await this.usersService.findOne(body);
-    }
-
     @Get("all")
     async getAll() {
-        return await this.usersService.findAll();
+        return this.usersService.findAll();
+    }
+
+    @Get(":id")
+    async getUser(@Param() params: GetUserDto) {
+        const { id } = params;
+
+        return this.usersService.findOne({ id });
+    }
+
+    @Get(":id/forms")
+    async getUserForms(@Param() params: GetUserDto) {
+        const { id } = params;
+
+        return this.usersService.getUserForms(id);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -44,17 +54,22 @@ export default class UsersController {
         @Body() body: EditUserDto,
         @Headers() headers: AuthorizationHeader,
     ) {
-        const userId = this.jwtService.decode(headers.Authorization);
-        return await this.usersService.editUser(userId as string, body);
+        const { authorization } = headers;
+        const userId = this.jwtService.decode(authorization.substr(7));
+        console.log(userId);
+
+        return this.usersService.editUser(userId as string, body);
     }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Delete()
-    // async deleteUser(@Headers() headers: AuthorizationHeader) {
-    //     console.log(
-    //         this.jwtService.decode(headers.Authorization, {
-    //             json: true,
-    //         }),
-    //     ); // check this
-    // } DELETE IS NOT IMPLEMENTED ON SYMBIOSIS YET
+    /*
+     * @UseGuards(JwtAuthGuard)
+     * @Delete()
+     * Async deleteUser(@Headers() headers: AuthorizationHeader) {
+     *     Console.log(
+     *         This.jwtService.decode(headers.Authorization, {
+     *             Json: true,
+     *         }),
+     *     ); // check this
+     * } DELETE IS NOT IMPLEMENTED ON SYMBIOSIS YET
+     */
 }

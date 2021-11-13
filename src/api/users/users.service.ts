@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@techmmunity/symbiosis-nestjs";
-import { User } from "database/entities/User";
+import { User } from "database/entities/user";
 import { Repository } from "@techmmunity/symbiosis-mongodb";
 import { hash } from "bcryptjs";
 import { isEmail } from "class-validator";
+import { Form } from "database/entities/form";
 import { EditUserDto, GetUserDto } from "./dto";
 
 @Injectable()
@@ -11,10 +12,13 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly users: Repository<User>,
+        @InjectRepository(Form)
+        private readonly forms: Repository<Form>,
     ) {} // eslint-disable-line no-empty-function
 
     private filterUser(user: User) {
         const { password, ...data } = user;
+
         return data;
     }
 
@@ -48,9 +52,10 @@ export class UsersService {
         await this.users.save({
             name: username,
             nickname: username,
-            email: email,
+            email,
             password: await hash(password, 8),
         });
+
         return {
             name: username,
             nickname: username,
@@ -59,7 +64,7 @@ export class UsersService {
         };
     }
 
-    async findOne(data: GetUserDto, filter: boolean = true) {
+    async findOne(data: GetUserDto, filter = true) {
         const { email, id } = data;
         const element = email || id;
 
@@ -117,22 +122,33 @@ export class UsersService {
             },
             user,
         );
+
         return {
             message: `${toChange} was updated successfully.`,
         };
     }
 
-    // async deleteOne(userId: string) {
-    //     const user = await this.findOne({ id: userId });
-    //     if (!user) {
-    //         throw new HttpException(
-    //             {
-    //                 status: HttpStatus.UNAUTHORIZED,
-    //                 error: "Invalid credencials were provided",
-    //             },
-    //             HttpStatus.UNAUTHORIZED,
-    //         );
-    //     }
-    //     await this.users.delete(userId); NOT IMPLEMENTED
-    // }
+    async getUserForms(userId: string) {
+        return await this.forms.find({
+            where: {
+                authorId: userId,
+            },
+        });
+    }
+
+    /*
+     * Async deleteOne(userId: string) {
+     *     Const user = await this.findOne({ id: userId });
+     *     If (!user) {
+     *         Throw new HttpException(
+     *             {
+     *                 Status: HttpStatus.UNAUTHORIZED,
+     *                 Error: "Invalid credencials were provided",
+     *             },
+     *             HttpStatus.UNAUTHORIZED,
+     *         );
+     *     }
+     *     Await this.users.delete(userId); NOT IMPLEMENTED
+     * }
+     */
 }

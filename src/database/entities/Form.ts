@@ -10,17 +10,12 @@ import { QuestionTypes } from "enums/question-types";
 @Entity({
     isSubEntity: true,
 })
-export class Alternative {
+export class AnsweredAlternative {
     @Column()
-    name: string
-}
+    alternative: string;
 
-@Entity({
-    isSubEntity: true,
-})
-export class AnsweredAlternative extends Alternative {
     @Column()
-    answer: string
+    answer: string;
 }
 
 @Entity({
@@ -30,16 +25,16 @@ export class Question {
     @Column({
         enum: QuestionTypes,
     })
-    type: QuestionTypes
+    type: QuestionTypes;
 
     @Column()
-    description: string
+    description: string;
 
     @Column({
-        type: Alternative,
+        type: String,
         defaultValue: [],
     })
-    alternatives: Alternative[]
+    alternatives: Array<string>;
 }
 
 @Entity({
@@ -47,16 +42,16 @@ export class Question {
 })
 export class Answer {
     @Column()
-    authorId: string
+    authorId: string;
 
     @Column()
-    textAnswer: string
+    textAnswer: string;
 
     @Column({
         type: AnsweredAlternative,
         defaultValue: [],
     })
-    alternatives: AnsweredAlternative[]
+    alternatives: Array<AnsweredAlternative>;
 }
 
 @Entity("forms")
@@ -80,13 +75,13 @@ export class Form {
     description: string;
 
     @Column(Question)
-    questions: Question[];
+    questions: Array<Question>;
 
     @Column({
         type: Answer,
         defaultvalue: [],
     })
-    answers: Answer[];
+    answers: Array<Answer>;
 
     @SaveDateColumn()
     createdAt: Date;

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { compare } from "bcryptjs";
 import { UsersService } from "api/users/users.service";
-import { User } from "database/entities/User";
+import { User } from "database/entities/user";
 import AuthDto from "./dto/auth.dto";
 
 @Injectable()
@@ -14,7 +14,7 @@ export class AuthService {
 
     private async validateUser(dto: AuthDto) {
         const { email, password } = dto;
-        const user = (await this.users.findOne({ email })) as User;
+        const user = (await this.users.findOne({ email }, false)) as User;
         const isPasswordCorrect = await compare(password, user.password);
 
         if (!isPasswordCorrect) {
@@ -35,11 +35,13 @@ export class AuthService {
             sub: id,
             claim: "user",
         });
+
         return jwt;
     }
 
     async signIn(dto: AuthDto) {
-        const { id, email } = await this.validateUser(dto);
+        const { id } = await this.validateUser(dto);
+
         return {
             accessToken: await this.signUser(id),
         };

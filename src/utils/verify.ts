@@ -3,7 +3,7 @@ import { Token } from "types/token";
 
 export const verify = (token: string) => {
     try {
-        const payload = verifyJwt(token, process.env.JWT_PRIVATE_KEY);
+        const payload = verifyJwt(token, process.env.JWT_SECRET);
 
         return payload as Token;
     } catch (_) {

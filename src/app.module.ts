@@ -1,8 +1,11 @@
 import { Module } from "@nestjs/common";
 import { SymbiosisModule } from "@techmmunity/symbiosis-nestjs";
-import { Connection, MongodbConnectionOptions } from "@techmmunity/symbiosis-mongodb";
-import { Form } from "database/entities/Form";
-import { User } from "database/entities/User";
+import {
+    Connection,
+    MongodbConnectionOptions,
+} from "@techmmunity/symbiosis-mongodb";
+import { Form } from "database/entities/form";
+import { User } from "database/entities/user";
 import { ConfigModule } from "@nestjs/config";
 import { APP_PIPE } from "@nestjs/core";
 import ValidationPipe from "validation/validation.pipe";

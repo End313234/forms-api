@@ -1,7 +1,7 @@
-import { IsString } from "class-validator";
+import { IsIn, IsString } from "class-validator";
 
 export class EditUserDto {
-    @IsString()
+    @IsIn(["password", "email", "nickname", "name"])
     toChange: string;
 
     @IsString()

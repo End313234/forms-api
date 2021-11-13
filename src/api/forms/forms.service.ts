@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@techmmunity/symbiosis-nestjs";
-import { Form } from "database/entities/Form";
+import { Form } from "database/entities/form";
 import { Repository } from "@techmmunity/symbiosis-mongodb";
-import { ObjectId } from "mongodb";
+import { CreateOneDto } from "./dto";
 
 @Injectable()
 export class FormsService {
@@ -16,10 +16,9 @@ export class FormsService {
     }
 
     async findOne(formId: string) {
-        const parsedId = new ObjectId(formId);
         const form = await this.forms.findOne({
             where: {
-                id: parsedId,
+                id: formId,
             },
         });
 
@@ -33,12 +32,17 @@ export class FormsService {
             );
         }
 
-        const { id, ...newForm } = form;
-        const formWithId = {
-            id: formId,
-            ...newForm,
-        };
+        return form;
+    }
 
-        return formWithId;
+    async create(body: CreateOneDto, authorId: string) {
+        const { title, description, questions } = body;
+        const form = await this.forms.save({
+            title,
+            description,
+            questions,
+            authorId,
+        });
+        return form[0];
     }
 }

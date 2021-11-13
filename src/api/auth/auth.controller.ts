@@ -3,7 +3,7 @@ import { AuthService } from "./auth.service";
 import AuthDto from "./dto/auth.dto";
 
 @Controller("auth")
-export default class AuthController {
+export class AuthController {
     // eslint-disable-next-line no-empty-function
     constructor(private readonly authService: AuthService) {}
 

@@ -1,11 +1,12 @@
 import {
     Column,
-    SaveDateColumn,
+    SaveData,
     Entity,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    SaveDateColumn,
 } from "@techmmunity/symbiosis";
-import { Form } from "./Form";
+import { Form } from "./form";
 
 @Entity("users")
 export class User {
@@ -30,7 +31,7 @@ export class User {
         type: Form,
         defaultValue: [],
     })
-    answeredForms: Form[];
+    answeredForms: Array<Form>;
 
     @SaveDateColumn()
     createdAt: Date;
