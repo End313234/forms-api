@@ -3,8 +3,9 @@ import {
     ArrayMinSize,
     ArrayNotEmpty,
     IsArray,
+    IsBoolean,
     IsEnum,
-    IsInstance,
+    IsNumber,
     IsString,
     ValidateIf,
     ValidateNested,
@@ -20,6 +21,13 @@ export class QuestionDto {
     @IsString()
     description: string;
 
+    @IsBoolean()
+    areMultipleChoices: boolean;
+
+    @ValidateIf((o) => o.areMultipleChoices)
+    @IsNumber()
+    maximumChoices: number;
+
     @ValidateIf((o) => o.type === "MULTIPLE")
     @IsArray()
     @IsString({
@@ -31,6 +39,9 @@ export class QuestionDto {
         message: "$property must have at least 2 items",
     })
     alternatives: Array<string>;
+
+    @IsBoolean()
+    isObrigatory: boolean;
 }
 
 export class CreateOneDto {
@@ -47,7 +58,7 @@ export class CreateOneDto {
         message: "$property must not be empty",
     })
     @ValidateNested({
-        message: "error found",
+        message: "error found in $property",
         each: true,
     })
     @ArrayMinSize(1, {

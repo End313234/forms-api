@@ -6,7 +6,6 @@ import {
     UpdateDateColumn,
     SaveDateColumn,
 } from "@techmmunity/symbiosis";
-import { Form } from "./form";
 
 @Entity("users")
 export class User {
@@ -28,10 +27,10 @@ export class User {
     password: string;
 
     @Column({
-        type: Form,
+        type: String,
         defaultValue: [],
     })
-    answeredForms: Array<Form>;
+    answeredForms: Array<string>;
 
     @SaveDateColumn()
     createdAt: Date;

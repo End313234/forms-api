@@ -56,7 +56,6 @@ export default class UsersController {
     ) {
         const { authorization } = headers;
         const userId = this.jwtService.decode(authorization.substr(7));
-        console.log(userId);
 
         return this.usersService.editUser(userId as string, body);
     }
@@ -65,9 +64,9 @@ export default class UsersController {
      * @UseGuards(JwtAuthGuard)
      * @Delete()
      * Async deleteUser(@Headers() headers: AuthorizationHeader) {
-     *     Console.log(
-     *         This.jwtService.decode(headers.Authorization, {
-     *             Json: true,
+     *     console.log(
+     *         this.jwtService.decode(headers.Authorization, {
+     *             json: true,
      *         }),
      *     ); // check this
      * } DELETE IS NOT IMPLEMENTED ON SYMBIOSIS YET

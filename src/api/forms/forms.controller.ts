@@ -1,6 +1,7 @@
 import {
     Body,
     Headers,
+    Param,
     Controller,
     Get,
     Post,
@@ -9,7 +10,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { JwtAuthGuard } from "api/auth/guard/jwt-auth-guard.guard";
 import { AuthorizationHeader } from "dto/authorization-header";
-import { CreateOneDto } from "./dto";
+import { AnswerDto, CreateOneDto } from "./dto";
 import { FormsService } from "./forms.service";
 
 @Controller("/forms")
@@ -24,20 +25,33 @@ export class FormsController {
         return this.formsService.findAll();
     }
 
-    // TODO: make findOne route
     @Get(":formId")
-    async findOne() {
-        return null;
+    async findOne(@Param() params: { formId: string }) {
+        const { formId } = params;
+        return await this.formsService.findOne(formId);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post(":formId/answers")
+    async createAnswer(
+        @Body() body: AnswerDto,
+        @Headers() headers: AuthorizationHeader,
+    ) {
+        const { authorization } = headers;
+        const { sub } = this.jwtService.decode(authorization.substr(7));
+
+        return await this.formsService.createAnswer(body, sub);
     }
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    async create(
+    async createForm(
         @Body() body: CreateOneDto,
         @Headers() headers: AuthorizationHeader,
     ) {
         const { authorization } = headers;
         const { sub } = this.jwtService.decode(authorization.substr(7));
-        return this.formsService.create(body, sub);
+
+        return await this.formsService.createForm(body, sub);
     }
 }

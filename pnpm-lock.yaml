@@ -21,6 +21,7 @@ specifiers:
   '@types/passport': ^1.0.7
   '@types/passport-jwt': ^3.0.6
   '@types/supertest': ^2.0.11
+  '@types/uuid': ^8.3.1
   '@typescript-eslint/eslint-plugin': ^5.3.1
   '@typescript-eslint/parser': ^5.3.1
   bcryptjs: ^2.4.3
@@ -44,6 +45,7 @@ specifiers:
   ts-node: ^10.4.0
   tsconfig-paths: ^3.11.0
   typescript: ^4.4.4
+  uuid: ^8.3.2
 
 dependencies:
   '@nestjs/common': 8.2.0_43f93dd897e68fe834a23ddd32fb54cc
@@ -52,7 +54,7 @@ dependencies:
   '@nestjs/jwt': 8.0.0_@nestjs+common@8.2.0
   '@nestjs/passport': 8.0.1_e38ccc00966e6542053476d59f5b5276
   '@nestjs/platform-express': 8.2.0_3be9f4a5443d29d58a8c4813bc34ec98
-  '@techmmunity/symbiosis': 0.0.26_reflect-metadata@0.1.13
+  '@techmmunity/symbiosis': 0.0.26_054e37a7151b907f97b4a533ca2a4e7c
   '@techmmunity/symbiosis-mongodb': 0.0.1_5494eafaef46697291c11fbfbee2c62a
   '@techmmunity/symbiosis-nestjs': 0.0.5_eb4ac4aa56586db96c5ca20fe6e9d96a
   bcryptjs: 2.4.3
@@ -64,6 +66,7 @@ dependencies:
   reflect-metadata: 0.1.13
   rimraf: 3.0.2
   rxjs: 7.4.0
+  uuid: 8.3.2
 
 devDependencies:
   '@nestjs/cli': 8.1.4_eslint@7.32.0
@@ -77,6 +80,7 @@ devDependencies:
   '@types/passport': 1.0.7
   '@types/passport-jwt': 3.0.6
   '@types/supertest': 2.0.11
+  '@types/uuid': 8.3.1
   '@typescript-eslint/eslint-plugin': 5.3.1_4daca2483796bdceece3758b04dba2a1
   '@typescript-eslint/parser': 5.3.1_eslint@7.32.0+typescript@4.4.4
   env-cmd: 10.1.0
@@ -1044,7 +1048,7 @@ packages:
       '@techmmunity/symbiosis': ^0.0.26
       reflect-metadata: ^0.1.13
     dependencies:
-      '@techmmunity/symbiosis': 0.0.26_reflect-metadata@0.1.13
+      '@techmmunity/symbiosis': 0.0.26_054e37a7151b907f97b4a533ca2a4e7c
       mongodb: 4.1.4
       reflect-metadata: 0.1.13
     dev: false
@@ -1059,11 +1063,11 @@ packages:
     dependencies:
       '@nestjs/common': 8.2.0_43f93dd897e68fe834a23ddd32fb54cc
       '@nestjs/core': 8.2.0_4cd843d44b7cc56d7dd061c958134502
-      '@techmmunity/symbiosis': 0.0.26_reflect-metadata@0.1.13
+      '@techmmunity/symbiosis': 0.0.26_054e37a7151b907f97b4a533ca2a4e7c
       reflect-metadata: 0.1.13
     dev: false
 
-  /@techmmunity/symbiosis/0.0.26_reflect-metadata@0.1.13:
+  /@techmmunity/symbiosis/0.0.26_054e37a7151b907f97b4a533ca2a4e7c:
     resolution: {integrity: sha512-WEt7CXR/ahsXKkHubmI4/cnaeCcqDw2DVZ5eZRk0w8KqcjIHRl0C8KmKpA9P8veXUdxu4TKXOSFyWfau9QfzUQ==}
     peerDependencies:
       reflect-metadata: ^0.1.13
@@ -1077,6 +1081,7 @@ packages:
       dayjs: 1.10.7
       reflect-metadata: 0.1.13
       tiny-glob: 0.2.9
+      uuid: 8.3.2
     dev: false
 
   /@techmmunity/utils/1.6.0:
@@ -1304,6 +1309,10 @@ packages:
     resolution: {integrity: sha512-uci4Esokrw9qGb9bvhhSVEjd6rkny/dk5PK/Qz4yxKiyppEI+dOPlNrZBahE3i+PoKFYyDxChVXZ/ysS/nrm1Q==}
     dependencies:
       '@types/superagent': 4.1.13
+    dev: true
+
+  /@types/uuid/8.3.1:
+    resolution: {integrity: sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==}
     dev: true
 
   /@types/validator/13.6.6:
