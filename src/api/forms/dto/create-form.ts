@@ -51,6 +51,9 @@ export class CreateOneDto {
     @IsString()
     description: string;
 
+    @IsBoolean()
+    canHaveMultipleAnswers: boolean;
+
     @IsArray({
         message: "$property must be an array",
     })

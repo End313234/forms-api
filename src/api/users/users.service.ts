@@ -5,6 +5,8 @@ import { Repository } from "@techmmunity/symbiosis-mongodb";
 import { hash } from "bcryptjs";
 import { isEmail } from "class-validator";
 import { Form } from "database/entities/form";
+import { throwUnauthorizedError } from "utils/errors/unauthorized";
+import { throwBadRequestError } from "utils/errors/bad-request";
 import { EditUserDto, GetUserDto } from "./dto";
 
 @Injectable()
@@ -30,13 +32,7 @@ export class UsersService {
         });
 
         if (!isEmail(email)) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.BAD_REQUEST,
-                    error: "Insert a valid email address!",
-                },
-                HttpStatus.BAD_REQUEST,
-            );
+            return throwBadRequestError("Insert a valid email address!");
         }
 
         if (possibleUser) {
@@ -49,7 +45,7 @@ export class UsersService {
             );
         }
 
-        await this.users.save({
+        await this.users.insert({
             name: username,
             nickname: username,
             email,
@@ -75,15 +71,10 @@ export class UsersService {
         });
 
         if (!user) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.UNAUTHORIZED,
-                    error: "Invalid credencials were provided",
-                },
-                HttpStatus.UNAUTHORIZED,
-            );
+            return throwUnauthorizedError("Invalid credencials were provided");
         }
 
+        // @ts-ignore
         return filter ? this.filterUser(user) : user;
     }
 
@@ -96,32 +87,17 @@ export class UsersService {
         const user = await this.findOne({ id: userId });
 
         if (user[toChange] !== oldValue) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.BAD_REQUEST,
-                    error: "Old value is not correct",
-                },
-                HttpStatus.BAD_REQUEST,
-            );
+            return throwBadRequestError("Old value is not correct");
         }
 
         if (oldValue === newValue) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.BAD_REQUEST,
-                    error: "Old value and the new value are the same",
-                },
-                HttpStatus.BAD_REQUEST,
+            return throwBadRequestError(
+                "Old value and the new value are the same",
             );
         }
 
         user[toChange] = newValue;
-        await this.users.upsert(
-            {
-                id: userId,
-            },
-            user,
-        );
+        await this.users.save(user);
 
         return {
             message: `${toChange} was updated successfully.`,
@@ -129,6 +105,8 @@ export class UsersService {
     }
 
     async getUserForms(userId: string) {
+        await this.findOne({ id: userId });
+
         return await this.forms.find({
             where: {
                 authorId: userId,
@@ -136,19 +114,15 @@ export class UsersService {
         });
     }
 
-    /*
-     * Async deleteOne(userId: string) {
-     *     Const user = await this.findOne({ id: userId });
-     *     If (!user) {
-     *         Throw new HttpException(
-     *             {
-     *                 Status: HttpStatus.UNAUTHORIZED,
-     *                 Error: "Invalid credencials were provided",
-     *             },
-     *             HttpStatus.UNAUTHORIZED,
-     *         );
-     *     }
-     *     Await this.users.delete(userId); NOT IMPLEMENTED
-     * }
-     */
+    async deleteOne(userId: string) {
+        const user = await this.findOne({ id: userId });
+        if (!user) {
+            return throwUnauthorizedError("Invalid credencials were provided");
+        }
+
+        await this.users.delete({
+            id: userId,
+        });
+        return {};
+    }
 }

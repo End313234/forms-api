@@ -11,7 +11,7 @@ import { QuestionTypes } from "enums/question-types";
 
 export class AnsweredQuestionDto {
     @IsUUID()
-    questionId: string;
+    id: string;
 
     @IsEnum(QuestionTypes, {
         message: "$property must be one of 'TEXT' or 'MULTIPLE'",
@@ -29,6 +29,9 @@ export class AnsweredQuestionDto {
 export class AnswerDto {
     @IsUUID("4")
     formId: string;
+
+    @IsUUID("4")
+    authorId: string;
 
     @IsArray()
     @ArrayNotEmpty()

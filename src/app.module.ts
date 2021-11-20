@@ -17,11 +17,14 @@ import API from "api";
         ConfigModule.forRoot({
             envFilePath: ".env.local",
         }),
-        SymbiosisModule.forRoot<MongodbConnectionOptions>(Connection, {
-            entities: [Form, User],
-            databaseConfig: {
-                databaseName: "FormsAPI",
-                url: process.env.DATABASE_URL,
+        SymbiosisModule.forRoot<MongodbConnectionOptions>({
+            class: Connection,
+            options: {
+                entities: [Form, User],
+                databaseConfig: {
+                    databaseName: "FormsAPI",
+                    url: process.env.DATABASE_URL,
+                },
             },
         }),
     ],

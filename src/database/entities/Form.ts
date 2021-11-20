@@ -1,15 +1,15 @@
 import {
     Entity,
+    SubEntity,
     PrimaryGeneratedColumn,
     Column,
-    SaveDateColumn,
+    InsertDateColumn,
     UpdateDateColumn,
 } from "@techmmunity/symbiosis";
+import { QuestionWithId } from "api/forms/types/question-with-id";
 import { QuestionTypes } from "enums/question-types";
 
-@Entity({
-    isSubEntity: true,
-})
+@SubEntity()
 export class AnsweredAlternative {
     @Column()
     alternative: string;
@@ -18,9 +18,7 @@ export class AnsweredAlternative {
     answer: string;
 }
 
-@Entity({
-    isSubEntity: true,
-})
+@SubEntity()
 export class Question {
     @Column({
         enum: QuestionTypes,
@@ -37,9 +35,7 @@ export class Question {
     alternatives: Array<string>;
 }
 
-@Entity({
-    isSubEntity: true,
-})
+@SubEntity()
 export class Answer {
     @Column()
     authorId: string;
@@ -74,8 +70,13 @@ export class Form {
     })
     description: string;
 
+    @Column({
+        defaultValue: false,
+    })
+    canHaveMultipleAnswers: boolean;
+
     @Column(Question)
-    questions: Array<Question>;
+    questions: Array<QuestionWithId>;
 
     @Column({
         type: Answer,
@@ -83,7 +84,7 @@ export class Form {
     })
     answers: Array<Answer>;
 
-    @SaveDateColumn()
+    @InsertDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()

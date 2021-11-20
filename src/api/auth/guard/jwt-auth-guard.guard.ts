@@ -5,18 +5,13 @@ import {
     HttpException,
     HttpStatus,
 } from "@nestjs/common";
+import { throwUnauthorizedError } from "utils/errors/unauthorized";
 import { verify } from "utils/verify";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
     private throwError() {
-        throw new HttpException(
-            {
-                status: HttpStatus.UNAUTHORIZED,
-                error: "Not authenticated",
-            },
-            HttpStatus.UNAUTHORIZED,
-        );
+        return throwUnauthorizedError("Not authenticated");
     }
 
     public canActivate(context: ExecutionContext) {

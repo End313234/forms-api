@@ -1,10 +1,9 @@
 import {
     Column,
-    SaveData,
     Entity,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
-    SaveDateColumn,
+    InsertDateColumn,
 } from "@techmmunity/symbiosis";
 
 @Entity("users")
@@ -32,7 +31,7 @@ export class User {
     })
     answeredForms: Array<string>;
 
-    @SaveDateColumn()
+    @InsertDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()

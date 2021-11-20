@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { compare } from "bcryptjs";
 import { UsersService } from "api/users/users.service";
 import { User } from "database/entities/user";
+import { throwUnauthorizedError } from "utils/errors/unauthorized";
 import AuthDto from "./dto/auth.dto";
 
 @Injectable()
@@ -18,13 +19,7 @@ export class AuthService {
         const isPasswordCorrect = await compare(password, user.password);
 
         if (!isPasswordCorrect) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.UNAUTHORIZED,
-                    error: "Credencials are incorrect",
-                },
-                HttpStatus.UNAUTHORIZED,
-            );
+            return throwUnauthorizedError("Credencials are incorrect");
         }
 
         return user;
@@ -39,7 +34,7 @@ export class AuthService {
         return jwt;
     }
 
-    async signIn(dto: AuthDto) {
+    async login(dto: AuthDto) {
         const { id } = await this.validateUser(dto);
 
         return {
