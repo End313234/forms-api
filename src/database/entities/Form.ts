@@ -84,6 +84,9 @@ export class Form {
     })
     answers: Array<Answer>;
 
+    @Column()
+    isPublic: boolean;
+
     @InsertDateColumn()
     createdAt: Date;
 

@@ -6,6 +6,7 @@ import {
     Get,
     Post,
     UseGuards,
+    Header,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { ApiHeader, ApiParam, ApiResponse } from "@nestjs/swagger";
@@ -43,10 +44,17 @@ export class FormsController {
         description: "The form ID",
         example: "4a13af68-7d56-4d88-912d-4c2a0c60580f",
     })
+    @UseGuards(JwtAuthGuard)
     @Get(":formId")
-    async findOne(@Param() params: { formId: string }) {
+    async findOne(
+        @Param() params: { formId: string },
+        @Headers() headers: AuthorizationHeader,
+    ) {
         const { formId } = params;
-        return await this.formsService.findOne(formId);
+        const { authorization } = headers;
+        const { sub } = this.jwtService.decode(authorization.substr(7));
+
+        return await this.formsService.findOne(formId, sub);
     }
 
     @ApiResponse({

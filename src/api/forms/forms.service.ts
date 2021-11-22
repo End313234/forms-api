@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 import { User } from "database/entities/user";
 import { Append } from "@techmmunity/symbiosis";
 import { throwBadRequestError } from "utils/errors/bad-request";
+import { throwUnauthorizedError } from "utils/errors/unauthorized";
 import { CreateOneDto, AnswerDto, AnsweredQuestionDto } from "./dto";
 import { QuestionWithId } from "./types/question-with-id";
 
@@ -32,7 +33,7 @@ export class FormsService {
         return (await this.forms.find({})).map((form) => form.id.toString());
     }
 
-    async findOne(formId: string) {
+    async findOne(formId: string, userId: string) {
         const form = await this.forms.findOne({
             where: {
                 id: formId,
@@ -45,13 +46,17 @@ export class FormsService {
             );
         }
 
+        if (!form.isPublic && form.authorId !== userId) {
+            return throwUnauthorizedError("This form is not public");
+        }
+
         return form;
     }
 
     async createForm(body: CreateOneDto, authorId: string) {
         const {
- title, description, questions, canHaveMultipleAnswers,
-} = body;
+            title, description, questions, canHaveMultipleAnswers, isPublic,
+        } = body;
         const questionsWithId = questions.map((question: QuestionWithId) => {
             question.id = uuid(); // eslint-disable-line no-param-reassign
             return question;
@@ -63,6 +68,7 @@ export class FormsService {
             questions: questionsWithId,
             authorId,
             canHaveMultipleAnswers,
+            isPublic,
         });
         return form[0];
     }
